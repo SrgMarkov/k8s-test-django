@@ -9,11 +9,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      project: django-k8s
+      app: django-k8s
   template:
     metadata:
       labels:
-        project: django-k8s
+        app: django-k8s
     spec:
       containers:
         - name : django-app
@@ -32,11 +32,10 @@ metadata:
   name: django-service
 spec:
   selector:   
-    project: django-k8s
-  type: NodePort
+    app: django-k8s
+  type: ClusterIP
   ports: 
-  - name: http
-    port: 80
-    targetPort: 80
-    nodePort: 30035
-    protocol: TCP
+    - name: tcp-port
+      port: 80
+      targetPort: 80
+      protocol: TCP

@@ -113,3 +113,24 @@ kubectl apply -f k8s-django-app.yml
 ```
 kubectl rollout restart deployment django-k8s
 ```
+
+### Запуск Imgress в minikube
+
+Включите аддон Ingress в Minikube
+```
+minikube addons enable ingress
+```
+
+Узнайте IP адрес ноды командой `minikube ip` и пропишите в файле `\etc\hosts` строку
+```
+{Node IP} star-burger.test
+```
+
+Добавьте `star-burger.test` в ALLOWED HOSTS
+
+Запустите конфигурацию Ingress коммандой
+```
+kubectl apply -f k8s-ingress.yml
+```
+
+и открывайте сайт в браузере по указанному доменному имени.
