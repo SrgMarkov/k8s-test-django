@@ -1,0 +1,42 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: django-k8s
+  labels:
+    app: django-app
+    tier: django
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      project: django-k8s
+  template:
+    metadata:
+      labels:
+        project: django-k8s
+    spec:
+      containers:
+        - name : django-app
+          image: django-app:latest
+          ports:
+            - containerPort: 80
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: django-app-config
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: django-service
+spec:
+  selector:   
+    project: django-k8s
+  type: NodePort
+  ports: 
+  - name: http
+    port: 80
+    targetPort: 80
+    nodePort: 30035
+    protocol: TCP

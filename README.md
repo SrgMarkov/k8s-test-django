@@ -74,3 +74,42 @@ $ docker compose build web
 `ALLOWED_HOSTS` -- настройка Django со списком разрешённых адресов. Если запрос прилетит на другой адрес, то сайт ответит ошибкой 400. Можно перечислить несколько адресов через запятую, например `127.0.0.1,192.168.0.1,site.test`. [Документация Django](https://docs.djangoproject.com/en/3.2/ref/settings/#allowed-hosts).
 
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
+
+
+
+### Как запустить прокект в minikube
+
+[Kubectl](https://kubernetes.io/ru/docs/tasks/tools/install-kubectl/) и [minikube](https://minikube.sigs.k8s.io/docs/) должны быть установлены и настроены.
+
+в корневой папуке проекта необходимо создать файл с зависимостями, например `k8s-config.yml` и прописать в него необходимые переменные окружения:
+
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-app-config
+  labels:
+    app: django-app
+    tier: django
+data:
+  SECRET_KEY: {REPLACE_ME}
+  DATABASE_URL: postgres://{USERNAME}:{PASSWORD}@{IP}:{PORT}/{DB}
+  DEBUG: 'True'
+  ALLOWED_HOSTS: 127.0.0.1,localhost
+```
+
+Загружаем config map командой
+```
+kubectl apply -f k8s-config.yml
+```
+
+Запустить проект командой
+```
+kubectl apply -f k8s-django-app.yml
+```
+
+в случае изменения конфигурационных данных необходимо снова применить `apply` к файлу конфигурации и перезагрузить deploy
+
+```
+kubectl rollout restart deployment django-k8s
+```
