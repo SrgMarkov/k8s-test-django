@@ -148,3 +148,11 @@ kubectl apply -f k8s-ingress.yml
 ```sh
 kubectl apply -f k8s-django-clearsessions.yml 
 ```
+
+### Запуск миграции БД
+
+Для запуска миграции базы данных, запукстите 
+```
+kubectl apply -f k8s-django-migrate.yml
+```
+
