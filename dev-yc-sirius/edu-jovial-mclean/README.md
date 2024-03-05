@@ -63,4 +63,4 @@ kubectl rollout restart deployment django-app
 
 #### Пример сайта
 
-Сайт доступен по ссылке - (click here)[https://edu-jovial-mclean.sirius-k8s.dvmn.org/]
+Сайт доступен по ссылке - [click here](https://edu-jovial-mclean.sirius-k8s.dvmn.org/)
