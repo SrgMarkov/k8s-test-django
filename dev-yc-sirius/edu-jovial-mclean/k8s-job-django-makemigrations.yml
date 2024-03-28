@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: django-migrate
+  namespace: edu-jovial-mclean
+  labels:
+    app: django-migrate
+spec:
+  ttlSecondsAfterFinished: 90
+  template:
+    spec:
+      containers:
+        - name: django-migrate
+          image: srgmarkov/k8s_django_app:latest
+          imagePullPolicy: Never
+          command: ["python", "./manage.py", "migrate", "--no-input"]
+          envFrom:
+            - configMapRef:
+                name: django-app-config
+      restartPolicy: OnFailure
