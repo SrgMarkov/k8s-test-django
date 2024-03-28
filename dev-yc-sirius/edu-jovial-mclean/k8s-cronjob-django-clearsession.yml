@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: django-clearsessions
+  namespace: edu-jovial-mclean
+  labels:
+    app: django-clearsessions
+spec:
+  schedule: "* 0 * * *"
+  startingDeadlineSeconds: 60
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: django-clearsessions
+            image: srgmarkov/k8s_django_app:latest
+            imagePullPolicy: IfNotPresent
+            command: ["python3", "manage.py", "clearsessions"]
+            envFrom:
+              - configMapRef:
+                  name: django-app-config
